@@ -13,4 +13,8 @@ class IntenUtils {
       _callback(value);
     });
   }
+
+  static backView(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 }
