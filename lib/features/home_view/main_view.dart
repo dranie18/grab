@@ -30,6 +30,7 @@ class _MainViewState extends State<MainView> {
           child: Stack(
         children: <Widget>[
           PageView(
+            physics: NeverScrollableScrollPhysics(),
             controller: _pageController,
             children: <Widget>[
               HomeScreen(),
@@ -52,16 +53,26 @@ class _MainViewState extends State<MainView> {
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text("Trang chủ")),
+              icon: Icon(Icons.home),
+              title: Text(
+                "Trang chủ",
+                style: TextStyle(fontSize: 13),
+              )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_activity), title: Text("Hoạt dộng")),
+              icon: Icon(Icons.local_activity),
+              title: Text(
+                "Hoạt dộng",
+                style: TextStyle(fontSize: 13),
+              )),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_balance_wallet),
-              title: Text("Thanh toán")),
+              title: Text("Thanh toán", style: TextStyle(fontSize: 13))),
           BottomNavigationBarItem(
-              icon: Icon(Icons.mail_outline), title: Text("Hộp thư")),
+              icon: Icon(Icons.mail_outline),
+              title: Text("Hộp thư", style: TextStyle(fontSize: 13))),
           BottomNavigationBarItem(
-              icon: Icon(Icons.supervisor_account), title: Text("Tài khoản")),
+              icon: Icon(Icons.supervisor_account),
+              title: Text("Tài khoản", style: TextStyle(fontSize: 13))),
         ],
         currentIndex: _curentIndex,
         type: BottomNavigationBarType.fixed,
@@ -72,5 +83,9 @@ class _MainViewState extends State<MainView> {
         unselectedItemColor: Colors.grey,
       ),
     );
+  }
+
+  TextStyle bottomBarStyle() {
+    return TextStyle(fontSize: 14);
   }
 }

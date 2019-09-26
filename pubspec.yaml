@@ -25,7 +25,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.5.3+4
   toast: ^0.1.5
-
+  google_maps_flutter: ^0.5.21+2
+  location: ^2.3.5
+  http: ^0.12.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -60,7 +62,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: "Fontfamily"
+    - family: "FontGrab"
       fonts:
         - asset: assets/fonts/medium_italic.ttf
         - asset: assets/fonts/medium_normal.ttf

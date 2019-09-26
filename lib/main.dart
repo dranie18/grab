@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/home_view/home/home_view.dart';
+import 'features/book_vehicle/book_vechicle.dart';
 import 'features/home_view/main_view.dart';
 
 void main() => runApp(MyApp());
@@ -14,11 +14,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       routes: {
         "/": (context) => MainView(),
+        "/bookvechicle": (context) => BookVehicle(),
       },
       theme: ThemeData(
-          primaryColor: Colors.lightGreen,
+          primaryColor: Colors.white,
           accentColor: Colors.green,
-          fontFamily: "Fontfamily"),
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Colors.transparent,
+          )),
     );
   }
 }
