@@ -28,6 +28,7 @@ dependencies:
   google_maps_flutter: ^0.5.21+2
   location: ^2.3.5
   http: ^0.12.0
+  slide_popup_dialog: ^0.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

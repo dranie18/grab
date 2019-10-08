@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:slide_popup_dialog/slide_popup_dialog.dart';
 import 'package:toast/toast.dart';
 
+import 'bloc_book_vehicle.dart';
 import 'book_vechicle_contract.dart';
 import 'book_vehicle_presenter.dart';
 import 'goi_xe.dart';
 
 BookVehiclePresenter _presenter;
+BlocBookVechicle bloc;
 
 class BookVehicle extends StatefulWidget {
   PageController _pageController;
   TabController _tabController;
 
   BookVehicle() {
+    bloc = BlocBookVechicle();
     _pageController = new PageController(keepPage: true, initialPage: 0);
     _tabController = TabController(length: 2, vsync: AnimatedListState());
   }
@@ -25,6 +29,13 @@ class _BookVehicleState extends State<BookVehicle>
   _BookVehicleState() {
     _presenter = new BookVehiclePresenter(this);
   }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,9 +48,7 @@ class _BookVehicleState extends State<BookVehicle>
             unselectedLabelStyle:
                 TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
             onTap: (index) {
-              widget._pageController.animateToPage(index,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.bounceInOut);
+              widget._pageController.jumpToPage(index);
             },
             controller: TabController(length: 2, vsync: AnimatedListState()),
             tabs: <Widget>[
@@ -58,7 +67,7 @@ class _BookVehicleState extends State<BookVehicle>
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: widget._pageController,
-          children: <Widget>[GoiXe(), ThueXe()],
+          children: <Widget>[GoiXe(bloc, _presenter), ThueXe()],
         ));
   }
 
@@ -82,7 +91,10 @@ class _BookVehicleState extends State<BookVehicle>
   }
 
   @override
-  void upDateRoad(value) {}
+  void upDateRoad(value) {
+//    print("demo asdkljasdklj ${value['candidates'][0]['formatted_address']}");
+    bloc.changeCamera(value);
+  }
 }
 
 class ThueXe extends StatelessWidget {
@@ -188,9 +200,12 @@ class ThueXe extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Scaffold.of(context).showBottomSheet(
-                          (ctx) => BottomSheetView(),
-                          elevation: 6);
+                      showSlideDialog(
+                          context: context,
+                          child: BottomSheetView(),
+                          barrierColor: Colors.black12,
+                          barrierDismissible: true,
+                          transitionDuration: Duration(milliseconds: 300));
                     },
                     child: Container(
                       height: 50,
@@ -383,170 +398,145 @@ class BottomSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment(0, 1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            child: Image.asset(
-                "assets/images/hdpi/abc_spinner_mtrl_am_alpha.9.png"),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15))),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(left: 0),
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Text("Đặt xe theo giờ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 17,
-                                    color: Colors.black54)),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Text(
-                              "Cước phí được tính đã bao gồm tiền xăng xe và công tài "
-                              "xế",
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          )
-                        ],
-                      ),
+      height: 500,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: ScrollPhysics(),
+        controller: ScrollController(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(left: 0),
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text("Đặt xe theo giờ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            color: Colors.black54)),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      "Cước phí được tính đã bao gồm tiền xăng xe và công tài "
+                      "xế",
+                      style: TextStyle(fontSize: 13),
                     ),
-                    Container(
-                      child: Column(
-                        children: listDemo.map((item) {
-                          List subList = item['list'];
-                          return Container(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 10, top: 15, bottom: 15),
-                                  color: Colors.grey[200],
-                                  width: double.infinity,
-                                  child: Text(
-                                    "${item['seaterNum']} seater / "
-                                    "${item['seaterNum']} chỗ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 17,
-                                        color: Colors.black54),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    children: subList
-                                        .map((map) => Container(
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Image.asset(
-                                                    "assets/images/hdpi/ic_parking_illustration"
-                                                    ".png",
-                                                    width: 80,
-                                                    height: 80,
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10,
-                                                                  top: 5,
-                                                                  bottom: 5),
-                                                          child: Text(
-                                                            "${map['timeToRent']}"
-                                                            " tiếng "
-                                                            "${map['sea'
-                                                                'terNum']} chỗ",
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10,
-                                                                  top: 5,
-                                                                  bottom: 5),
-                                                          child: Text(
-                                                            "Di chuyển trong HN "
-                                                            "trong vòng "
-                                                            "${map['timeToRent']} "
-                                                            "tiếng ",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .grey),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      child: Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        "VND ",
-                                                        style: TextStyle(
-                                                            color: Colors.grey),
-                                                      ),
-                                                      Text(
-                                                        "${map['cost']}K",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                      )
-                                                    ],
-                                                  ))
-                                                ],
-                                              ),
-                                            ))
-                                        .toList(),
-                                  ),
-                                )
-                              ]));
-                        }).toList(),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
-          )
-        ],
+            Container(
+              child: Column(
+                children: listDemo.map((item) {
+                  List subList = item['list'];
+                  return Container(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                        Container(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 15, bottom: 15),
+                          color: Colors.grey[200],
+                          width: double.infinity,
+                          child: Text(
+                            "${item['seaterNum']} seater / "
+                            "${item['seaterNum']} chỗ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 17,
+                                color: Colors.black54),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: subList
+                                .map((map) => Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/hdpi/ic_parking_illustration"
+                                            ".png",
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10,
+                                                      top: 5,
+                                                      bottom: 5),
+                                                  child: Text(
+                                                    "${map['timeToRent']}"
+                                                    " tiếng "
+                                                    "${map['sea'
+                                                        'terNum']} chỗ",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10,
+                                                      top: 5,
+                                                      bottom: 5),
+                                                  child: Text(
+                                                    "Di chuyển trong HN "
+                                                    "trong vòng "
+                                                    "${map['timeToRent']} "
+                                                    "tiếng ",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.grey),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                              child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "VND ",
+                                                style: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              Text(
+                                                "${map['cost']}K",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            ],
+                                          ))
+                                        ],
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        )
+                      ]));
+                }).toList(),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
