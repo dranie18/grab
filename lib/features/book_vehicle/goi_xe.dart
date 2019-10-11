@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:adhara_socket_io/manager.dart';
+import 'package:adhara_socket_io/options.dart';
+import 'package:adhara_socket_io/socket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,10 +15,20 @@ class GoiXe extends StatefulWidget {
   List listMarker = new List();
   BlocBookVechicle _bloc;
   BookVehiclePresenter _presenter;
+  SocketIOManager manager = SocketIOManager();
+  SocketIO socket;
+  void setSocket() async {
+    print("00000000000000000000");
+    socket =
+        await manager.createInstance(SocketOptions("http://1.2.3.116:9000/"));
+    print("000000000000000" + socket.toString());
+    socket.connect();
+  }
 
   GoiXe(this._bloc, this._presenter);
   @override
   _GoiXeState createState() {
+    setSocket();
     listMarker.addAll([
       {
         'id': '1',
@@ -115,16 +128,21 @@ class _GoiXeState extends State<GoiXe> {
 //        _markers.add(marker);
 //      });
 
-//      Timer.periodic(new Duration(milliseconds: 200), (timer) {
-//        print("dfghjkaaaaaaaaaaaa");
-//        setState(() {
-//          marker = new Marker(
-//              markerId: MarkerId("1"),
-//              position: LatLng(lat += 0.00005, long += 0.00005));
-//          _markers.clear();
-//          _markers.add(marker);
-//        });
-//      });
+      Timer.periodic(new Duration(milliseconds: 200), (timer) {
+        print("dfghjkaaaaaaaaaaaa");
+        lat += 0.00005;
+        long += 0.00005;
+        widget.socket.emit("location", [
+          {"lat": lat, "lng": long}
+        ]);
+
+        setState(() {
+          marker =
+              new Marker(markerId: MarkerId("1"), position: LatLng(lat, long));
+          _markers.clear();
+          _markers.add(marker);
+        });
+      });
 
 //      for (int i = 0; i < 200; i++) {
 //        print("${i}");
