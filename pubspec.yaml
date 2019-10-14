@@ -35,7 +35,8 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
   flutter_facebook_login: ^3.0.0
-
+  camera: ^0.5.5+1
+  image_picker: ^0.6.1+8
 dev_dependencies:
   flutter_test:
     sdk: flutter

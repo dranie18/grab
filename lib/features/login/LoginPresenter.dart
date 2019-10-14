@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:grab_demo/features/home_view/home/home_view.dart';
 import 'package:grab_demo/repository/loginReposiory.dart';
+import 'package:grab_demo/ultis/IntentUltis.dart';
 import 'package:http/http.dart' as http;
 
 import 'LoginContract.dart';
@@ -9,25 +12,23 @@ class LoginPresenter {
   final String _uri = "http://1.2.3.116:9000";
   LoginRepository _loginRepository;
   LoginContract loginContract;
-  LoginPresenter(this._loginRepository, this.loginContract);
+  BuildContext context;
+  LoginPresenter(this._loginRepository, this.loginContract, this.context);
 
   void loginNomal(value) {
-    http
-        .post(_uri + "/auth",
-            body: {"email": value['email'], "password": value['password']},
-            encoding: Encoding.getByName("text/json"))
-        .then((reponse) {
-      if (reponse.statusCode == 201) {
-        loginContract
-            .loginStatus({"status": 1, "mess": "Đăng nhập thành công"});
-        print(reponse.body);
-      } else {
-        loginContract.loginStatus({
-          "status": 0,
-          "mess": "Đăng nhập thất "
-              "bại"
-        });
-      }
+    String username = value["email"];
+    String password = value["password"];
+
+    String basicAuth =
+        "Basic " + base64Encode(utf8.encode('${username}:${password}'));
+    print('basicAuth: ' + basicAuth);
+    http.post(
+      _uri + "/auth",
+      headers: {"Authorization": basicAuth},
+    ).then((reponse) {
+      IntenUtils.changeScreenNomal(context, HomeScreen());
+    }).catchError((err) {
+      print(err);
     });
   }
 
@@ -40,7 +41,7 @@ class LoginPresenter {
 //          if (reponse.statusCode == 201) {
 //            loginContract
 //                .loginStatus({"status": 1, "mess": "Đăng nhập thành công"});
-          print("reponse  ${reponse.statusCode}  " + reponse.body);
+          print("reponse  ${reponse}  " + reponse.body);
 //          } else {
 //            loginContract.loginStatus({
 //              "status": 0,
@@ -79,5 +80,11 @@ class LoginPresenter {
     }).catchError((error) {
       print(error);
     });
+  }
+
+  void signIn(value) {
+    http.post(_uri + "/users", body: value).then((response) {
+      print(response.body);
+    }).catchError((err) => {print(err)});
   }
 }

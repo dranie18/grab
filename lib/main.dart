@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'features/book_vehicle/book_vechicle.dart';
-import 'features/login/Login.dart';
+import 'features/home_view/home/home_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,12 +13,11 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       title: 'Flutter Demo',
       routes: {
-        "/": (context) => LoginView(),
+        "/": (context) => HomeScreen(),
         "/bookvechicle": (context) => BookVehicle(),
       },
       theme: ThemeData(
           primaryColor: Colors.white,
-          accentColor: Colors.green,
           bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: Colors.transparent,
           )),
