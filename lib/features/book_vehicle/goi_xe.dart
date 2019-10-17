@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:toast/toast.dart';
 
 import 'bloc_book_vehicle.dart';
 import 'book_vehicle_presenter.dart';
@@ -103,32 +102,63 @@ class _GoiXeState extends State<GoiXe> {
 //    widget._presenter.getName({'lat': lat, "long": long});
     if (lattitude != null) lat = lattitude;
     if (longtitude != null) long = longtitude;
-    GoogleMapController controller = await _controller.future;
-    if (controller != null) {
-      controller
+    GoogleMapController googleMapController = await _controller.future;
+    if (googleMapController != null) {
+      googleMapController
           .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), 18));
       widget._presenter.getName({'lat': lat, "long": long});
-      setState(() {
-        _markers.addAll(widget.listMarker
-            .map(
-              (item) => Marker(
-                infoWindow: InfoWindow(
-                  title: item['title'],
-                  snippet: item['snippet'],
-                  onTap: () {
-                    print("demook");
-                  },
-                ),
-                anchor: Offset(0.5, 0.5),
-                icon: BitmapDescriptor.fromAsset(
-                    "assets/images/hdpi/ic_nav_pickup_sk.png"),
-                flat: false,
-                markerId: MarkerId(item["id"]),
-                position: LatLng(item['la'], item['long']),
-              ),
-            )
-            .toList());
-      });
+      Marker marker =
+          new Marker(markerId: MarkerId("1"), position: LatLng(lat, long));
+
+//      setState(() {
+//        _markers.clear();
+//        _markers.add(marker);
+//      });
+
+//      Timer.periodic(new Duration(milliseconds: 200), (timer) {
+//        print("dfghjkaaaaaaaaaaaa");
+//        setState(() {
+//          marker = new Marker(
+//              markerId: MarkerId("1"),
+//              position: LatLng(lat += 0.00005, long += 0.00005));
+//          _markers.clear();
+//          _markers.add(marker);
+//        });
+//      });
+
+//      for (int i = 0; i < 200; i++) {
+//        print("${i}");
+//        setState(() {
+//          marker = new Marker(
+//              markerId: MarkerId("1"),
+//              position: LatLng(lat += 0.5, long += 0.5));
+//          _markers.clear();
+//          _markers.add(marker);
+//        });
+//      }
+//      setState(() {
+//        _markers.clear();
+//        _markers.add(marker);
+////        _markers.addAll(widget.listMarker
+////            .map(
+////              (item) => Marker(
+////                infoWindow: InfoWindow(
+////                  title: item['title'],
+////                  snippet: item['snippet'],
+////                  onTap: () {
+////                    print("demook");
+////                  },
+////                ),
+////                anchor: Offset(0.5, 0.5),
+////                draggable: true,
+////                icon: BitmapDescriptor.fromAsset(
+////                    "assets/images/hdpi/ic_nav_pickup_sk.png"),
+////                markerId: MarkerId(item["id"]),
+////                position: LatLng(item['la'], item['long']),
+////              ),
+////            )
+////            .toList());
+//      });
     }
   }
 
@@ -139,20 +169,20 @@ class _GoiXeState extends State<GoiXe> {
 
   @override
   Widget build(BuildContext context) {
-    _location.onLocationChanged().listen((currentLocation) {
-      print(currentLocation.latitude);
-      print(currentLocation.longitude);
-      print(currentLocation.accuracy);
-      print(currentLocation.altitude);
-      print(currentLocation.speed);
-      print(currentLocation.speedAccuracy);
-      Toast.show(
-          "current ${currentLocation.latitude}, ${currentLocation.longitude} speed= ${currentLocation.speed}",
-          context);
-      _moveToNewYork(
-          lattitude: currentLocation.latitude,
-          longtitude: currentLocation.longitude);
-    });
+//    _location.onLocationChanged().listen((currentLocation) {
+//      print(currentLocation.latitude);
+//      print(currentLocation.longitude);
+//      print(currentLocation.accuracy);
+//      print(currentLocation.altitude);
+//      print(currentLocation.speed);
+//      print(currentLocation.speedAccuracy);
+//      Toast.show(
+//          "current ${currentLocation.latitude}, ${currentLocation.longitude} speed= ${currentLocation.speed}",
+//          context);
+//      _moveToNewYork(
+//          lattitude: currentLocation.latitude,
+//          longtitude: currentLocation.longitude);
+//    });
     return Container(
         child: Column(
       children: <Widget>[
@@ -194,12 +224,12 @@ class _GoiXeState extends State<GoiXe> {
                       height: 30,
                       width: 30,
                     ),
-//              FloatingActionButton(
-//                onPressed: () {
-//                  _goToNewYork();
-//                },
-//                child: Text("sd"),
-//              )
+              FloatingActionButton(
+                onPressed: () {
+                  _goToNewYork();
+                },
+                child: Text("sd"),
+              )
             ],
           ),
         ),
@@ -388,9 +418,18 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                       width: 350,
                       padding: EdgeInsets.all(15),
                       child: TextField(
+                        autofocus: true,
+                        onEditingComplete: () {
+                          print("00000000000" + widget._textControll.text);
+                          widget.presenter
+                              .searchByName(widget._textControll.text);
+                        },
+                        onChanged: (value) {
+                          print("00000000000" + widget._textControll.text);
+//                          widget._textControll.text = value;
+                        },
                         onSubmitted: (value) {
-                          widget._textControll.text = value;
-                          widget.presenter.searchByName(value);
+                          print("00000000000" + value);
                         },
                         controller: widget._textControll,
                         maxLines: 1,

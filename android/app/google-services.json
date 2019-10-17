@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "340828063689",
+    "firebase_url": "https://grabdemo.firebaseio.com",
+    "project_id": "grabdemo",
+    "storage_bucket": "grabdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340828063689:android:b005120aa88b6ff636ca18",
+        "android_client_info": {
+          "package_name": "aib.grab_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340828063689-9hn1bglmb4qt0qdfn1rn2sojrle6sjmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLLwOvdv65Wi-Q5bco0ci1VcgyDm_1_rM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340828063689-9hn1bglmb4qt0qdfn1rn2sojrle6sjmm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

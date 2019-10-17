@@ -1,4 +1,5 @@
 import 'package:grab_demo/ultis/common.dart';
+import 'package:http/http.dart' as api;
 
 import 'book_vechicle_contract.dart';
 
@@ -18,11 +19,12 @@ class BookVehiclePresenter {
   }
 
   void searchByName(value) async {
+    print("0000000000000000000000000" + value);
     String uri =
         "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"
         "input=${value}&inputtype=textquery&fields=photos,formatted_address,name,"
         "geometry&key=${Common.API_KEY}";
-//    var response = await api.get(uri);
-//    if (response.statusCode == 200) print(response.body);
+    var response = await api.get(uri);
+    print("00000000000000000000000" + response.body);
   }
 }
