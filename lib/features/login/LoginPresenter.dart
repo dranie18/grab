@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:grab_demo/features/home_view/home/home_view.dart';
+import 'package:grab_demo/features/user/home_view/home/home_view.dart';
 import 'package:grab_demo/repository/loginReposiory.dart';
 import 'package:grab_demo/ultis/IntentUltis.dart';
+import 'package:grab_demo/ultis/common.dart';
 import 'package:http/http.dart' as http;
 
 import 'LoginContract.dart';
 
 class LoginPresenter {
-  final String _uri = "http://1.2.3.116:9000";
   LoginRepository _loginRepository;
   LoginContract loginContract;
   BuildContext context;
@@ -23,10 +23,10 @@ class LoginPresenter {
         "Basic " + base64Encode(utf8.encode('${username}:${password}'));
     print('basicAuth: ' + basicAuth);
     http.post(
-      _uri + "/auth",
+      Common.SERVER_URI + "/auth",
       headers: {"Authorization": basicAuth},
     ).then((reponse) {
-      IntenUtils.changeScreenNomal(context, HomeScreen());
+      IntentUtils.changeScreenNomal(context, HomeScreen());
     }).catchError((err) {
       print(err);
     });
@@ -36,7 +36,8 @@ class LoginPresenter {
     _loginRepository.loginWithFace().then((value) {
       if (value['status'] == "ok") {
         http
-            .post(_uri + "/auth/facebook?access_token=${value['result']}")
+            .post(Common.SERVER_URI +
+                "/auth/facebook?access_token=${value['result']}")
             .then((reponse) {
 //          if (reponse.statusCode == 201) {
 //            loginContract
@@ -61,7 +62,9 @@ class LoginPresenter {
     _loginRepository.loginWithGoogle().then((value) {
       if (value['status'] == "ok") {
         http
-            .post(_uri + "/auth/google" + "?access_token=${value['result']}")
+            .post(Common.SERVER_URI +
+                "/auth/google" +
+                "?access_token=${value['result']}")
             .then((reponse) {
 //          if (reponse.statusCode == 201) {
 //            loginContract
@@ -83,7 +86,7 @@ class LoginPresenter {
   }
 
   void signIn(value) {
-    http.post(_uri + "/users", body: value).then((response) {
+    http.post(Common.SERVER_URI + "/users", body: value).then((response) {
       print(response.body);
     }).catchError((err) => {print(err)});
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grab_demo/features/book_vehicle/book_vechicle.dart';
+import 'package:grab_demo/features/user/book_vehicle/book_vechicle.dart';
 import 'package:grab_demo/ultis/IntentUltis.dart';
 import 'package:toast/toast.dart';
 
@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
       'key': 'payment'
     },
     {
-      'content': 'Gói Hội viên',
+      'content': 'Gói hội viên',
       'img': 'assets/images/hdpi/ic_parking_'
           'illustration.png',
       'key': 'memmber_package'
@@ -222,7 +222,13 @@ class ItemList extends StatelessWidget {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(10),
-                  child: Text("demo"),
+                  child: Text(
+                    "Hướng dẫn sử dụng ví điện tử Grab",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17),
+                  ),
                 ),
                 Expanded(
                   child: Container(),
@@ -357,7 +363,10 @@ class ItemView extends StatelessWidget {
               ),
               Text(
                 _data['content'],
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.black),
               )
             ],
           ),
@@ -368,12 +377,12 @@ class ItemView extends StatelessWidget {
     switch (data) {
       case "car":
         {
-          IntenUtils.changeScreenNomal(this._context, BookVehicle());
+          IntentUtils.changeScreenNomal(this._context, BookVehicle());
           break;
         }
       case "bike":
         {
-          IntenUtils.changeScreenNomal(this._context, BookVehicle());
+          IntentUtils.changeScreenNomal(this._context, BookVehicle());
           break;
         }
       case "food":

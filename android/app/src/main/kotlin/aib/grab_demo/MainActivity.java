@@ -25,7 +25,7 @@ public class MainActivity extends FlutterActivity {
                 switch (methodCall.method){
                     case "location":{
                         double lat = methodCall.argument("lat");
-                        double lon = methodCall.argument("long");
+                        double lon = methodCall.argument("lng");
 //                        getAddress(new Location().);
                         break;
                     }

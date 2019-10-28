@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:grab_demo/features/driver/driver_home/DriverHome.dart';
 import 'package:grab_demo/features/login/signup.dart';
+import 'package:grab_demo/features/user/home_view/main_view.dart';
 import 'package:grab_demo/repository/loginReposiory.dart';
+import 'package:grab_demo/ultis/IntentUltis.dart';
 
 import 'LoginContract.dart';
 import 'LoginPresenter.dart';
@@ -141,6 +144,13 @@ class _LoginState extends State<Login> {
 //                            if (check())
                             widget.presenter.loginNomal(
                                 {'email': _email, 'password': _pass});
+                            if (_email == "ok") {
+                              IntentUtils.changeScreenNomal(
+                                  context, DriverHome());
+                            } else {
+                              IntentUtils.changeScreenNomal(
+                                  context, MainView());
+                            }
 //                        loginNomal()
                           },
                           child: Container(

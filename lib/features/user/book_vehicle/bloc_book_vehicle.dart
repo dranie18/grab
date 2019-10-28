@@ -1,15 +1,17 @@
 import 'dart:async';
 
-import '../../bloc_base.dart';
+import '../../../bloc_base.dart';
 
 class BlocBookVechicle implements BlocBase {
   StreamController streamListController = StreamController.broadcast();
+
 // sink
   var bookSink;
 
 // function to change the color
-  changeCamera(value) {
-    streamListController.sink.add(value);
+  upDateData(value) {
+    streamListController.sink
+        .add({"check": value["check"], "value": value["value"]});
   }
 
   @override

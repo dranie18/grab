@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grab_demo/features/home_view/payment/patment.dart';
+import 'package:grab_demo/features/user/home_view/payment/patment.dart';
 
 import 'account/account_view.dart';
 import 'activities/activity_view.dart';
@@ -19,7 +19,7 @@ class _MainViewState extends State<MainView> {
   PageController _pageController;
 
   _MainViewState() {
-    _pageController = new PageController();
+    _pageController = new PageController(keepPage: true, initialPage: 0);
   }
 
   @override
@@ -45,9 +45,8 @@ class _MainViewState extends State<MainView> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           setState(() {
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 300),
-                curve: Curves.bounceInOut);
+            _pageController.jumpToPage(index);
+//                duration: Duration(milliseconds: 0), curve: Curves.bounceInOut);
             _curentIndex = index;
           });
         },
@@ -56,29 +55,30 @@ class _MainViewState extends State<MainView> {
               icon: Icon(Icons.home),
               title: Text(
                 "Trang chủ",
-                style: TextStyle(fontSize: 13),
+                style: TextStyle(fontSize: 10),
               )),
           BottomNavigationBarItem(
               icon: Icon(Icons.local_activity),
               title: Text(
                 "Hoạt dộng",
-                style: TextStyle(fontSize: 13),
+                style: TextStyle(fontSize: 10),
               )),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_balance_wallet),
-              title: Text("Thanh toán", style: TextStyle(fontSize: 13))),
+              title: Text("Thanh toán", style: TextStyle(fontSize: 10))),
           BottomNavigationBarItem(
               icon: Icon(Icons.mail_outline),
-              title: Text("Hộp thư", style: TextStyle(fontSize: 13))),
+              title: Text("Hộp thư", style: TextStyle(fontSize: 10))),
           BottomNavigationBarItem(
               icon: Icon(Icons.supervisor_account),
-              title: Text("Tài khoản", style: TextStyle(fontSize: 13))),
+              title: Text("Tài khoản", style: TextStyle(fontSize: 10))),
         ],
         currentIndex: _curentIndex,
         type: BottomNavigationBarType.fixed,
         elevation: 4,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
+        selectedFontSize: 13,
+        unselectedFontSize: 12,
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
       ),
